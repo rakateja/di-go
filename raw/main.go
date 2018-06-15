@@ -10,8 +10,8 @@ import (
 
 var (
 	mysqlHost     = "localhost"
-	mysqlUser     = "raka"
-	mysqlPassword = "raka_pass"
+	mysqlUser     = "root"
+	mysqlPassword = "root-pass"
 )
 
 type Following struct {

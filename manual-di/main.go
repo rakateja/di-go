@@ -72,8 +72,8 @@ func (service Service) Create(username, fullName string) error {
 
 var (
 	mysqlHost     = "localhost"
-	mysqlUser     = "raka"
-	mysqlPassword = "raka_pass"
+	mysqlUser     = "root"
+	mysqlPassword = "root-pass"
 )
 
 func main() {

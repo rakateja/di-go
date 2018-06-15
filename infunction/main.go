@@ -44,7 +44,7 @@ func NewFollowing(username, fullName string) Following {
 }
 
 func main() {
-	sqlDB, err := newSql("localhost", "raka", "raka_pass")
+	sqlDB, err := newSql("localhost", "root", "root-pass")
 	if err != nil {
 		log.Fatalf("Error %v", err)
 	}

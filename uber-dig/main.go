@@ -21,8 +21,8 @@ func buildContainer() *dig.Container {
 		flag.StringVar(&cfg.Prefix, "prefix", "[following_service]", "log prefix")
 		flag.IntVar(&cfg.Port, "port", 8080, "service's port")
 		flag.StringVar(&cfg.MysqlHost, "mysql_host", "localhost", "mysql's host")
-		flag.StringVar(&cfg.MysqlUser, "mysql_user", "raka", "mysql's user")
-		flag.StringVar(&cfg.MysqlPassword, "mysql_password", "raka_pass", "mysql user's password")
+		flag.StringVar(&cfg.MysqlUser, "mysql_user", "root", "mysql's user")
+		flag.StringVar(&cfg.MysqlPassword, "mysql_password", "root-pass", "mysql user's password")
 		flag.Parse()
 		return cfg
 	})
