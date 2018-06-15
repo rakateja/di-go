@@ -16,9 +16,10 @@ import (
 
 func buildContainer() *dig.Container {
 	c := dig.New()
+
 	c.Provide(func() config.Config {
 		var cfg config.Config
-		flag.StringVar(&cfg.Prefix, "prefix", "[following_service]", "log prefix")
+		flag.StringVar(&cfg.Prefix, "prefix", "[following_service] ", "log prefix")
 		flag.IntVar(&cfg.Port, "port", 8080, "service's port")
 		flag.StringVar(&cfg.MysqlHost, "mysql_host", "localhost", "mysql's host")
 		flag.StringVar(&cfg.MysqlUser, "mysql_user", "root", "mysql's user")
@@ -29,40 +30,47 @@ func buildContainer() *dig.Container {
 	c.Provide(func(cfg config.Config) *log.Logger {
 		return log.New(os.Stdout, cfg.Prefix, 0)
 	})
-	c.Provide(func(cfg config.Config, l *log.Logger) (*sql.DB, error) {
-		return mysql.New(cfg)
-	})
-	c.Provide(func(sqlDB *sql.DB) following.Repository {
-		return following.NewMysqlRepository(sqlDB)
-	})
-	c.Provide(func(repo following.Repository) following.Service {
-		return following.NewService(repo)
-	})
+	c.Provide(mysql.New)
+	c.Provide(following.NewMysqlRepository)
+	c.Provide(following.NewService)
+	c.Provide(NewServer)
 	return c
 }
 
-func server(l *log.Logger, sqlDB *sql.DB, service following.Service) {
+type Server struct {
+	logger  *log.Logger
+	sqlDB   *sql.DB
+	service following.Service
+}
+
+func NewServer(l *log.Logger, sqlDB *sql.DB, service following.Service) Server {
+	return Server{l, sqlDB, service}
+}
+
+func (s Server) Serve() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		l.Printf("Got request, URL %s", req.URL)
-		err := sqlDB.Ping()
+		s.logger.Printf("Got request, URL %s", req.URL)
+		err := s.sqlDB.Ping()
 		if err != nil {
 			w.Write([]byte(err.Error()))
 			return
 		}
-		err = service.Create("root", "I'm Root!")
+		err = s.service.Create("root", "I'm Root!")
 		if err != nil {
 			w.Write([]byte(err.Error()))
 			return
 		}
 		w.Write([]byte("Done!"))
 	})
-	l.Println("listening on port :8080")
+	s.logger.Println("listening on port :8080")
 	http.ListenAndServe(":8080", nil)
 }
 
 func main() {
 	c := buildContainer()
-	if err := c.Invoke(server); err != nil {
+	if err := c.Invoke(func(s Server) {
+		s.Serve()
+	}); err != nil {
 		panic(err)
 	}
 }
