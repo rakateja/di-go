@@ -1,2 +1,2 @@
 ## di-go
-Discover dependency injection solution for Go
+Discover available solution for dependency injection in Go programming language
