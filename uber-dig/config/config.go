@@ -6,4 +6,5 @@ type Config struct {
 	MysqlHost     string
 	MysqlUser     string
 	MysqlPassword string
+	MysqlDB       string
 }

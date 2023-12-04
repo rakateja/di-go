@@ -9,7 +9,7 @@ import (
 )
 
 func New(cfg config.Config) (*sql.DB, error) {
-	connString := fmt.Sprintf("%s:%s@tcp(%s:3306)/following", cfg.MysqlUser, cfg.MysqlPassword, cfg.MysqlHost)
+	connString := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s", cfg.MysqlUser, cfg.MysqlPassword, cfg.MysqlHost, cfg.MysqlDB)
 	sqlDB, err := sql.Open("mysql", connString)
 	if err != nil {
 		return nil, err

@@ -55,7 +55,7 @@ func newSql(mysqlHost, mysqlUser, mysqlPassword string) (*sql.DB, error) {
 }
 
 type Service struct {
-	followingRepository Repository
+	Repository
 }
 
 func NewService(followingRepository Repository) Service {
@@ -63,7 +63,7 @@ func NewService(followingRepository Repository) Service {
 }
 
 func (service Service) Create(username, fullName string) error {
-	err := service.followingRepository.Store(NewFollowing(username, fullName))
+	err := service.Store(NewFollowing(username, fullName))
 	if err != nil {
 		return err
 	}
