@@ -19,7 +19,7 @@ func (mock MockRepository) Store(entity following.Following) error {
 func TestInsertFollowing(t *testing.T) {
 	followingRepository := NewMockRepository()
 	followingService := following.NewService(followingRepository)
-	if err := followingService.Insert("root", "I'm Root"); err != nil {
+	if err := followingService.Store(following.Following{Username: "root", FullName: "I'm Root"}); err != nil {
 		t.Errorf("Got %v, expect nil  when inserting new following", err.Error())
 	}
 }

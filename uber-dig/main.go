@@ -8,10 +8,11 @@ import (
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	"go.uber.org/dig"
+
 	config "github.com/rakateja/di-go/uber-dig/config"
 	"github.com/rakateja/di-go/uber-dig/following"
 	mysql "github.com/rakateja/di-go/uber-dig/mysql"
-	"go.uber.org/dig"
 )
 
 func buildContainer() *dig.Container {
@@ -24,6 +25,8 @@ func buildContainer() *dig.Container {
 		flag.StringVar(&cfg.MysqlHost, "mysql_host", "localhost", "mysql's host")
 		flag.StringVar(&cfg.MysqlUser, "mysql_user", "root", "mysql's user")
 		flag.StringVar(&cfg.MysqlPassword, "mysql_password", "root-pass", "mysql user's password")
+		flag.StringVar(&cfg.MysqlDB, "mysql_db", "following", "mysql database")
+
 		flag.Parse()
 		return cfg
 	})
